@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+            {% for product in products %}
+                {% if forloop.first or forloop.counter0|divisibleby:4 %}
+                <div class="row">
+                {% endif %}
+                    <div class="col-md-3">
+                        <div class="card m-1">
+                            <img class="card-img-top" src="{{ product.picture.url }}" alt="">
+                            <div class="card-body">
+                                <h4 class="card-title">{{ product.name }}</h4>
+                                <h4 class="card-text" >${{ product.price }}</h4>
+                                <button class="btn btn-primary pbtn" value="{{ product.id }}">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                {% if forloop.counter|divisibleby:4 or forloop.last %}
+                </div>
+                {% endif %}
+            {% endfor %}
+        
+    </div>
+
+
+{% endblock content %}
