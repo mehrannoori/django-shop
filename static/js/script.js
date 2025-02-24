@@ -33,7 +33,10 @@ function addToCart(e) {
         body: JSON.stringify(data),
     })
     .then( res => res.json() )
-    .then(console.log(data))
+    .then(data =>{
+        console.log(data);
+        document.getElementById("num_of_items").innerHTML = data;
+    })
     .catch( err => console.log(err))
 }
 

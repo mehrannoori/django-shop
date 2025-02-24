@@ -28,7 +28,7 @@
                     <a class="nav-link" href="{% url 'store' %}">Store</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="javascript:void(0)">Link</a>
+                    <a class="nav-link" href="{% url 'cart' %}">Cart (<span id="num_of_items">{{ cart.num_of_items }}</span>)</a>
                   </li>
                 </ul>
                 <form class="d-flex">
