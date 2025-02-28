@@ -28,34 +28,59 @@
     </div>
     <button type="submit" class="btn btn-primary" onclick="makePayment()">Pay</button>
 </div>
-<script src="https://checkout.flutterwave.com/v3.js"></script>
+
 <script>
+    function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getCookie('csrftoken');
     let cart_total = "{{cart.total_price}}";
     let cart_id = "{{cart.id}}";
-
     function makePayment() {
-        FlutterwaveCheckout({
-        public_key: "FLWPUBK_TEST-PUBLIC KEY",
-        tx_ref: "titanic-48981487343MDI0NzMx",
-        amount: cart_total,
-        currency: "USD",
-        payment_options: "card, mobilemoneyghana, ussd",
-        redirect_url: "http://127.0.0.1:8000/confirm_payment/"+cart_id,
-        meta: {
-            consumer_id: 23,
-            consumer_mac: "92a3-912ba-1192a",
-        },
-        customer: {
-            email: "rose@unsinkableship.com",
-            phone_number: "08102909304",
-            name: "{{request.user.username}}",
-        },
-        customizations: {
-            title: "My Shop",
-            description: "Buy with ease",
-            logo: "https://www.logolynx.com/images/logolynx/22/2239ca38f5505fbfce7e55bbc0604386.jpeg",
-        },
-        });
+        redirect_url= "http://127.0.0.1:8000/store/confirm_payment/" + cart_id + '/';
+        fetch(redirect_url, {
+            method: 'POST',
+            headers: {'Content-Type':'application/json', 'X-CSRFToken': csrftoken},
+            body: ''
+        })
+        .then(res => res['statusText'])
+        .then(status=>document.getElementById("alertId").innerHTML=status);
     }
+    // function makePayment() {
+    //     FlutterwaveCheckout({
+    //     public_key: "FLWPUBK_TEST-PUBLIC KEY",
+    //     tx_ref: "titanic-48981487343MDI0NzMx",
+    //     amount: cart_total,
+    //     currency: "USD",
+    //     payment_options: "card, mobilemoneyghana, ussd",
+    //     redirect_url: "http://127.0.0.1:8000/confirm_payment/" + cart_id,
+    //     meta: {
+    //         consumer_id: 23,
+    //         consumer_mac: "92a3-912ba-1192a",
+    //     },
+    //     customer: {
+    //         email: "rose@unsinkableship.com",
+    //         phone_number: "08102909304",
+    //         name: "{{request.user.username}}",
+    //     },
+    //     customizations: {
+    //         title: "My Shop",
+    //         description: "Buy with ease",
+    //         logo: "https://www.logolynx.com/images/logolynx/22/2239ca38f5505fbfce7e55bbc0604386.jpeg",
+    //     },
+    //     });
+    // }
 </script>
 {% endblock content %}

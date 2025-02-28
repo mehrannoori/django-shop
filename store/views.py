@@ -1,12 +1,14 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import json
 from django.http import JsonResponse
+from django.contrib import messages
 
 from .models import Product, Cart, CartItem
 
 
 
 def store_index(request):
+    cart = None
     products = Product.objects.all()
     if request.user.is_authenticated:
         cart, created_cart = Cart.objects.get_or_create(user=request.user, completed=False)
@@ -42,5 +44,14 @@ def add_to_cart(request):
         cartItem.save()
         num_of_items = cart.num_of_items
 
-
     return JsonResponse(num_of_items, safe=False)
+
+
+def confirm_payment(request, pk):
+    cart = Cart.objects.get(id=pk)
+    cart.completed = True
+    cart.save()
+
+    messages.success(request, "Payment made successfully")
+    #return redirect("store.html")
+    return JsonResponse('Ok', safe=False)
