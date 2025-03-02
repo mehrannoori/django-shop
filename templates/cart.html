@@ -11,7 +11,7 @@
         <div class="name col-md-3"><h4>Unit Price</h4></div>
         <div class="name col-md-3"><h4>Price</h4></div>
     </div>
-    {% for item in items %}
+    {% for item in cart.cartitems.all %}
         <div class="row">
                 <div class="name col-md-3"><p> {{ item.product.name }} </p></div>
                 <div class="name col-md-3"> {{ item.quantity }} </div>
@@ -53,10 +53,9 @@ const csrftoken = getCookie('csrftoken');
         fetch(redirect_url, {
             method: 'POST',
             headers: {'Content-Type':'application/json', 'X-CSRFToken': csrftoken},
-            body: ''
+            redirect: 'follow',
         })
-        .then(res => res['statusText'])
-        .then(status=>document.getElementById("alertId").innerHTML=status);
+        .then(res => console.log(res))
     }
     // function makePayment() {
     //     FlutterwaveCheckout({
